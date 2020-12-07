@@ -12,7 +12,6 @@ from tensorboardX import SummaryWriter
 from others.utils import rouge_results_to_str, test_rouge, tile
 from translate.beam import GNMTGlobalScorer
 
-
 def build_predictor(args, tokenizer, symbols, model, logger=None):
     scorer = GNMTGlobalScorer(args.alpha, length_penalty='wu')
 
@@ -300,7 +299,9 @@ class Translator(object):
                     for i in range(alive_seq.size(0)):
                         fail = False
                         words = [int(w) for w in alive_seq[i]]
+                        print(self.vocab.ids_to_tokens)
                         words = [self.vocab.ids_to_tokens[w] for w in words]
+                        print(words)
                         words = ' '.join(words).replace(' ##', '').split()
                         if (len(words) <= 3):
                             continue
