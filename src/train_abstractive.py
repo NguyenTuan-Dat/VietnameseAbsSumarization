@@ -335,17 +335,17 @@ def train_abs_single(args, device_id):
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--bpe-codes',
-                        default="./bpe.codes",
+                        default="/content/PhoBERT_base_transformers/bpe.codes",
                         required=False,
                         type=str,
                         help='path to fastBPE BPE'
                         )
-    args, unknown = parser.parse_known_args()
-    bpe = fastBPE(args)
+    args1, unknown = parser.parse_known_args()
+    bpe = fastBPE(args1)
 
     # Load the dictionary
     vocab = Dictionary()
-    vocab.add_from_file("./dict.txt")
+    vocab.add_from_file("/content/PhoBERT_base_transformers/dict.txt")
 
     tokenizer = bpe
     symbols = {'BOS': vocab.indices['[unused0]'], 'EOS': vocab.indices['[unused1]'],
