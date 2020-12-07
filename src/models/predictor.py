@@ -89,8 +89,8 @@ class Translator(object):
             if tokens[-1] == self.end_token:
                 tokens = tokens[:-1]
                 break
-        tokens = [t for t in tokens if t < len(self.vocab)]
-        tokens = self.vocab.DecodeIds(tokens).split(' ')
+        tokens = [self.vocab.symbols[t] for t in tokens if t < len(self.vocab)]
+        # tokens = self.vocab.DecodeIds(tokens).split(' ')
         return tokens
 
     def from_batch(self, translation_batch):
@@ -104,7 +104,7 @@ class Translator(object):
 
         translations = []
         for b in range(batch_size):
-            pred_sents = self.vocab.convert_ids_to_tokens([int(n) for n in preds[b][0]])
+            pred_sents = [self.vocab.symbols[int(n)] for n in preds[b][0]]
             pred_sents = ' '.join(pred_sents).replace(' ##', '')
             gold_sent = ' '.join(tgt_str[b].split())
             # translation = Translation(fname[b],src[:, b] if src is not None else None,
@@ -112,7 +112,7 @@ class Translator(object):
             #                           attn[b], pred_score[b], gold_sent,
             #                           gold_score[b])
             # src = self.spm.DecodeIds([int(t) for t in translation_batch['batch'].src[0][5] if int(t) != len(self.spm)])
-            raw_src = [self.vocab.ids_to_tokens[int(t)] for t in src[b]][:500]
+            raw_src = [self.vocab.symbols[int(t)] for t in src[b]][:500]
             raw_src = ' '.join(raw_src)
             translation = (pred_sents, gold_sent, raw_src)
             # translation = (pred_sents[0], gold_sent)

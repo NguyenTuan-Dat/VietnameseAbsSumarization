@@ -190,10 +190,24 @@ def validate(args, device_id, pt, step):
     valid_iter = data_loader.Dataloader(args, load_dataset(args, 'valid', shuffle=False),
                                         args.batch_size, device,
                                         shuffle=False, is_test=False)
-    phobert = AutoModel.from_pretrained("vinai/phobert-base")
-    tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base', do_lower_case=True, cache_dir=args.temp_dir)
-    symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
-               'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--bpe-codes',
+                        default="/content/PhoBERT_base_transformers/bpe.codes",
+                        required=False,
+                        type=str,
+                        help='path to fastBPE BPE'
+                        )
+    args1, unknown = parser.parse_known_args()
+    bpe = fastBPE(args1)
+
+    # Load the dictionary
+    vocab = Dictionary()
+    vocab.add_from_file("/content/PhoBERT_base_transformers/dict.txt")
+
+    tokenizer = bpe
+    symbols = {'BOS': vocab.indices['[unused0]'], 'EOS': vocab.indices['[unused1]'],
+               'PAD': vocab.indices['[PAD]'], 'EOQ': vocab.indices['[unused2]']}
 
     valid_loss = abs_loss(model.generator, symbols, model.vocab_size, train=False, device=device)
 
@@ -223,10 +237,24 @@ def test_abs(args, device_id, pt, step):
     test_iter = data_loader.Dataloader(args, load_dataset(args, 'test', shuffle=False),
                                        args.test_batch_size, device,
                                        shuffle=False, is_test=True)
-    phobert = AutoModel.from_pretrained("vinai/phobert-base")
-    tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base', do_lower_case=True, cache_dir=args.temp_dir)
-    symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
-               'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--bpe-codes',
+                        default="/content/PhoBERT_base_transformers/bpe.codes",
+                        required=False,
+                        type=str,
+                        help='path to fastBPE BPE'
+                        )
+    args1, unknown = parser.parse_known_args()
+    bpe = fastBPE(args1)
+
+    # Load the dictionary
+    vocab = Dictionary()
+    vocab.add_from_file("/content/PhoBERT_base_transformers/dict.txt")
+
+    tokenizer = bpe
+    symbols = {'BOS': vocab.indices['[unused0]'], 'EOS': vocab.indices['[unused1]'],
+               'PAD': vocab.indices['[PAD]'], 'EOQ': vocab.indices['[unused2]']}
+
     predictor = build_predictor(args, tokenizer, symbols, model, logger)
     predictor.translate(test_iter, step)
 
@@ -332,6 +360,7 @@ def train_abs_single(args, device_id):
         optim = [model_builder.build_optim(args, model, checkpoint)]
 
     logger.info(model)
+    print("model.vocab_size" + str(model.vocab_size))
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--bpe-codes',

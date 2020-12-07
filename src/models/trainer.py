@@ -181,10 +181,10 @@ class Trainer(object):
 
 
                             plt.clf()
-                            plt.title("Loss Function (Xent)")
-                            plt.plot(arr_valid, list_xent_valid, color="orange", label="Xent Validate")
-                            plt.plot(arr_train, list_xent_train, color="blue", label="Xent Train")
-                            plt.ylabel("Xent")
+                            plt.title("Loss Function")
+                            plt.plot(arr_valid, list_xent_valid, color="orange", label="Validate")
+                            plt.plot(arr_train, list_xent_train, color="blue", label="Train")
+                            plt.ylabel("Cross Entropy(Xent)")
                             plt.xlabel("Step")
                             plt.legend()
                             plt.savefig(str(step) + ".jpg")
