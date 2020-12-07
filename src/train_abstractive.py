@@ -14,6 +14,10 @@ import time
 import torch
 from transformers import AutoTokenizer, AutoModel
 from pytorch_transformers import BertTokenizer
+from fairseq.data.encoders.fastbpe import fastBPE
+from fairseq.data import Dictionary
+import argparse
+
 
 import distributed
 from models import data_loader, model_builder
@@ -329,10 +333,23 @@ def train_abs_single(args, device_id):
 
     logger.info(model)
 
-    phobert = AutoModel.from_pretrained("vinai/phobert-base")
-    tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-base")
-    symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
-               'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--bpe-codes',
+                        default="./bpe.codes",
+                        required=False,
+                        type=str,
+                        help='path to fastBPE BPE'
+                        )
+    args, unknown = parser.parse_known_args()
+    bpe = fastBPE(args)
+
+    # Load the dictionary
+    vocab = Dictionary()
+    vocab.add_from_file("./dict.txt")
+
+    tokenizer = bpe
+    symbols = {'BOS': vocab.indices['[unused0]'], 'EOS': vocab.indices['[unused1]'],
+               'PAD': vocab.indices['[PAD]'], 'EOQ': vocab.indices['[unused2]']}
 
     train_loss = abs_loss(model.generator, symbols, model.vocab_size, device, train=True,
                           label_smoothing=args.label_smoothing)
