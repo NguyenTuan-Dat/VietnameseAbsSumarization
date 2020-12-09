@@ -255,7 +255,7 @@ def test_abs(args, device_id, pt, step):
     symbols = {'BOS': vocab.indices['[unused0]'], 'EOS': vocab.indices['[unused1]'],
                'PAD': vocab.indices['[PAD]'], 'EOQ': vocab.indices['[unused2]']}
 
-    predictor = build_predictor(args, tokenizer, symbols, model, logger)
+    predictor = build_predictor(args, vocab, symbols, model, logger)
     predictor.translate(test_iter, step)
 
 
