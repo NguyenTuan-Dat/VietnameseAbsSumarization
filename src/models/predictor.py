@@ -299,17 +299,19 @@ class Translator(object):
                     for i in range(alive_seq.size(0)):
                         fail = False
                         words = [int(w) for w in alive_seq[i]]
-                        words = [self.vocab.symbols[w] for w in words]
-                        print(words)
-                        words = ' '.join(words).replace(' ##', '').split()
-                        if (len(words) <= 3):
+                        try:
+                            words = [self.vocab.symbols[w] for w in words]
+                            words = ' '.join(words).replace(' ##', '').split()
+                            if (len(words) <= 3):
+                                continue
+                            trigrams = [(words[i - 1], words[i], words[i + 1]) for i in range(1, len(words) - 1)]
+                            trigram = tuple(trigrams[-1])
+                            if trigram in trigrams[:-1]:
+                                fail = True
+                            if fail:
+                                curr_scores[i] = -10e20
+                        except Exception:
                             continue
-                        trigrams = [(words[i - 1], words[i], words[i + 1]) for i in range(1, len(words) - 1)]
-                        trigram = tuple(trigrams[-1])
-                        if trigram in trigrams[:-1]:
-                            fail = True
-                        if fail:
-                            curr_scores[i] = -10e20
 
             curr_scores = curr_scores.reshape(-1, beam_size * vocab_size)
             topk_scores, topk_ids = curr_scores.topk(beam_size, dim=-1)
