@@ -177,7 +177,7 @@ parser1.add_argument('-log_file', default='../logs/cnndm.log')
 parser1.add_argument('-seed', default=666, type=int)
 
 parser1.add_argument("-test_all", type=str2bool, nargs='?',const=True,default=False)
-parser1.add_argument("-test_from", default='')
+parser1.add_argument("-test_from", default='/content/drive/MyDrive/Colab Notebooks/Models/PreSumm/model_step_7000.pt')
 parser1.add_argument("-test_start_from", default=-1, type=int)
 
 parser1.add_argument("-train_from", default='')
