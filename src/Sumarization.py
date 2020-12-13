@@ -28,55 +28,58 @@ def do_format_to_json(args):
     files = os.listdir(args.raw_path)
     content_json = "["
     for file_path in files:
-        file = open(args.raw_path + file_path)
-        content_file = file.read()
-        lines = []
-        segmentations = rdrsegmenter.tokenize(content_file)
-        for seg in segmentations:
-            lines.append(" ".join(seg))
-        print(lines)
-        content_json += """\n{\n"src":["""
-        content_format_json = list()
-        highlight_format_json = list()
-        index_highlight = 0
-        for i in range(len(lines)):
-            line = lines[i].replace("\n", "")
-            if line == "":
-                index_highlight = i + 1
-                break
+        try:
+            file = open(args.raw_path + file_path)
+            content_file = file.read()
+            lines = []
+            segmentations = rdrsegmenter.tokenize(content_file)
+            for seg in segmentations:
+                lines.append(" ".join(seg))
+            print(lines)
+            content_json += """\n{\n"src":["""
+            content_format_json = list()
+            highlight_format_json = list()
+            index_highlight = 0
+            for i in range(len(lines)):
+                line = lines[i].replace("\n", "")
+                if line == "":
+                    index_highlight = i + 1
+                    break
 
-            words = []
-            for word in line.split(" "):
-                if "\"" in word:
-                    word = word.replace("\"", "\\\"")
-                words.append(word)
+                words = []
+                for word in line.split(" "):
+                    if "\"" in word:
+                        word = word.replace("\"", "\\\"")
+                    words.append(word)
 
-            content_format_json.append("[\n" + ",\n".join(["\"" + word + "\"" for word in words]) + "\n]")
+                content_format_json.append("[\n" + ",\n".join(["\"" + word + "\"" for word in words]) + "\n]")
 
-        for line in lines[index_highlight:]:
-            line = line.replace("\n", "")
-            if line == "@highlight" or line == "":
-                continue
+            for line in lines[index_highlight:]:
+                line = line.replace("\n", "")
+                if line == "@highlight" or line == "":
+                    continue
 
-            words = []
-            for word in line.split(" "):
-                if "\"" in word:
-                    word = word.replace("\"", "\\\"")
-                words.append(word)
-            highlight_format_json.append("[\n" + ",\n".join(["\"" + word + "\"" for word in words]) + "\n]")
+                words = []
+                for word in line.split(" "):
+                    if "\"" in word:
+                        word = word.replace("\"", "\\\"")
+                    words.append(word)
+                highlight_format_json.append("[\n" + ",\n".join(["\"" + word + "\"" for word in words]) + "\n]")
 
-        content_json += ",\n".join(content_format_json) + """\n],\n"tgt": [\n""" + ",\n".join(
-            highlight_format_json) + "\n]\n},"
+            content_json += ",\n".join(content_format_json) + """\n],\n"tgt": [\n""" + ",\n".join(
+                highlight_format_json) + "\n]\n},"
 
-        if count == 0 and count % 1000 == 0:
-            content_json += "]"
-            index_last_comma = content_json.rfind(",")
-            content_json = content_json[:index_last_comma] + content_json[index_last_comma + 1:]
-            file_save = open(args.raw_path + "Vietnamese.test." + str(count_json_file) + ".json", "w")
-            file_save.write(content_json)
-            content_json = "["
-            count_json_file += 1
-        count += 1
+            if count == 0 and count % 1000 == 0:
+                content_json += "]"
+                index_last_comma = content_json.rfind(",")
+                content_json = content_json[:index_last_comma] + content_json[index_last_comma + 1:]
+                file_save = open(args.raw_path + "Vietnamese.test." + str(count_json_file) + ".json", "w")
+                file_save.write(content_json)
+                content_json = "["
+                count_json_file += 1
+            count += 1
+        except Exception:
+            continue
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-pretrained_model", default='bert', type=str)
