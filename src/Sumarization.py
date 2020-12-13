@@ -187,6 +187,6 @@ args1 = parser.parse_args()
 
 do_format_to_json(args)
 do_format_to_bert(args)
-device = "cpu" if args.visible_gpus == '-1' else "cuda"
+device = "cpu" if args1.visible_gpus == '-1' else "cuda"
 device_id = 0 if device == "cuda" else -1
 validate_abs(args1, device_id)
