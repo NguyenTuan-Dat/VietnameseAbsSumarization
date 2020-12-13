@@ -183,7 +183,7 @@ parser1.add_argument("-test_start_from", default=-1, type=int)
 parser1.add_argument("-train_from", default='')
 parser1.add_argument("-report_rouge", type=str2bool, nargs='?',const=True,default=True)
 parser1.add_argument("-block_trigram", type=str2bool, nargs='?', const=True, default=True)
-args1 = parser.parse_args()
+args1 = parser1.parse_args()
 
 do_format_to_json(args)
 do_format_to_bert(args)
