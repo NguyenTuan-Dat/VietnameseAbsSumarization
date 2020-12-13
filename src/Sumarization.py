@@ -4,6 +4,7 @@ import time
 import os
 from others.logging import init_logger
 from prepro import data_builder
+from train_abstractive import validate_abs
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -182,3 +183,6 @@ parser1.add_argument("-block_trigram", type=str2bool, nargs='?', const=True, def
 
 do_format_to_json(args)
 do_format_to_bert(args)
+device = "cpu" if args.visible_gpus == '-1' else "cuda"
+device_id = 0 if device == "cuda" else -1
+validate_abs(args, device_id)
