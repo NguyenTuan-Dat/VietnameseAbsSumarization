@@ -175,7 +175,7 @@ class Translator(object):
                         # pred_str = ' '.join(pred_str.split()[:len(gold_str.split())])
                     # self.raw_can_out_file.write(' '.join(pred).strip() + '\n')
                     # self.raw_gold_out_file.write(' '.join(gold).strip() + '\n')
-                    self.can_out_file.write(str(ct) + " "+ pred_str + '\n')
+                    self.can_out_file.write(pred_str.split("</s>")[0] + '\n')
                     self.gold_out_file.write(str(ct) + " "+ gold_str + '\n')
                     self.src_out_file.write(str(ct) + " "+ src.strip() + '\n')
                     ct += 1
