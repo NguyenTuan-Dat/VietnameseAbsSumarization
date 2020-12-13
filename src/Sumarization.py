@@ -189,4 +189,6 @@ do_format_to_json(args)
 do_format_to_bert(args)
 device = "cpu" if args1.visible_gpus == '-1' else "cuda"
 device_id = 0 if device == "cuda" else -1
+args1.gpu_ranks = [int(i) for i in range(len(args1.visible_gpus.split(',')))]
+args1.world_size = len(args1.gpu_ranks)
 validate_abs(args1, device_id)
