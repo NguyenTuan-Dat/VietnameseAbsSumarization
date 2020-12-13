@@ -21,7 +21,7 @@ def do_format_to_bert(args):
     print(time.clock())
 
 def do_format_to_json(args):
-    rdrsegmenter = VnCoreNLP("./vncorenlp/VnCoreNLP-1.1.1.jar",
+    rdrsegmenter = VnCoreNLP("VietnameseAbsSumarization/src/vncorenlp/VnCoreNLP-1.1.1.jar",
                              annotators="wseg", max_heap_size='-Xmx500m')
     count = 0
     count_json_file = 0
