@@ -208,7 +208,7 @@ def hashhex(s):
 class BertData():
     def __init__(self, args):
         self.args = args
-        self.tokenizer = BertTokenizer.from_pretrained('phobert-base', do_lower_case=True)
+        self.tokenizer = BertTokenizer.from_pretrained('vinai/phobert-base', do_lower_case=True)
 
         self.sep_token = '[SEP]'
         self.cls_token = '[CLS]'
@@ -305,6 +305,9 @@ def _format_to_bert(params):
     jobs = json.load(open(json_file))
     datasets = []
     for d in jobs:
+        print("d: ")
+        print(d)
+        print()
         source, tgt = d['src'], d['tgt']
 
         sent_labels = greedy_selection(source[:args.max_src_nsents], tgt, 3)
