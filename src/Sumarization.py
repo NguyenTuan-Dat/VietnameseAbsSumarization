@@ -197,4 +197,4 @@ try:
     step = int(cp.split('.')[-2].split('_')[-1])
 except:
     step = 0
-test_abs(args, device_id, cp, step)
+test_abs(args1, device_id, cp, step)
