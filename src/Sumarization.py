@@ -104,7 +104,7 @@ parser1.add_argument("-task", default='abs', type=str, choices=['ext', 'abs'])
 parser1.add_argument("-encoder", default='baseline', type=str, choices=['bert', 'baseline'])
 parser1.add_argument("-mode", default='test', type=str, choices=['train', 'validate', 'test'])
 parser1.add_argument("-bert_data_path", default=args.save_path)
-parser1.add_argument("-model_path", default='/content/drive/MyDrive/Colab\ Notebooks/Models/PreSumm/')
+parser1.add_argument("-model_path", default='/content/drive/MyDrive/Colab Notebooks/Models/PreSumm/')
 parser1.add_argument("-result_path", default='VietnameseAbsSumarization/logs/abs_bert_cnndm')
 parser1.add_argument("-temp_dir", default='VietnameseAbsSumarization/logs/')
 
@@ -180,9 +180,10 @@ parser1.add_argument("-test_start_from", default=-1, type=int)
 parser1.add_argument("-train_from", default='')
 parser1.add_argument("-report_rouge", type=str2bool, nargs='?',const=True,default=True)
 parser1.add_argument("-block_trigram", type=str2bool, nargs='?', const=True, default=True)
+args1 = parser.parse_args()
 
 do_format_to_json(args)
 do_format_to_bert(args)
 device = "cpu" if args.visible_gpus == '-1' else "cuda"
 device_id = 0 if device == "cuda" else -1
-validate_abs(args, device_id)
+validate_abs(args1, device_id)
