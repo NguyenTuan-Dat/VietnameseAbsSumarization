@@ -4,7 +4,7 @@ import time
 import os
 from others.logging import init_logger
 from prepro import data_builder
-from train_abstractive import validate_abs
+from train_abstractive import validate_abs, test_abs
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -191,4 +191,10 @@ device = "cpu" if args1.visible_gpus == '-1' else "cuda"
 device_id = 0 if device == "cuda" else -1
 args1.gpu_ranks = [int(i) for i in range(len(args1.visible_gpus.split(',')))]
 args1.world_size = len(args1.gpu_ranks)
-validate_abs(args1, device_id)
+# validate_abs(args1, device_id)
+cp = args1.test_from
+try:
+    step = int(cp.split('.')[-2].split('_')[-1])
+except:
+    step = 0
+test_abs(args, device_id, cp, step)
