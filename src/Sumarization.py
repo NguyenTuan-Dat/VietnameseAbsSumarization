@@ -69,7 +69,7 @@ def do_format_to_json(args):
             content_json += ",\n".join(content_format_json) + """\n],\n"tgt": [\n""" + ",\n".join(
                 highlight_format_json) + "\n]\n},"
 
-            if count == 0 and count % 1000 == 0:
+            if count == len(files)-1 and count % 1000 == 0:
                 content_json += "]"
                 index_last_comma = content_json.rfind(",")
                 content_json = content_json[:index_last_comma] + content_json[index_last_comma + 1:]
