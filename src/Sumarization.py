@@ -69,14 +69,14 @@ def do_format_to_json(args):
             content_json += ",\n".join(content_format_json) + """\n],\n"tgt": [\n""" + ",\n".join(
                 highlight_format_json) + "\n]\n},"
 
-            if count == len(files)-1 and count % 1000 == 0:
-                content_json += "]"
-                index_last_comma = content_json.rfind(",")
-                content_json = content_json[:index_last_comma] + content_json[index_last_comma + 1:]
-                file_save = open(args.raw_path + "Vietnamese.test." + str(count_json_file) + ".json", "w")
-                file_save.write(content_json)
-                content_json = "["
-                count_json_file += 1
+            # if count == len(files)-1 and count % 1000 == 0:
+            content_json += "]"
+            index_last_comma = content_json.rfind(",")
+            content_json = content_json[:index_last_comma] + content_json[index_last_comma + 1:]
+            file_save = open(args.raw_path + "Vietnamese.test." + str(count_json_file) + ".json", "w")
+            file_save.write(content_json)
+            content_json = "["
+            count_json_file += 1
             count += 1
         except Exception:
             continue
